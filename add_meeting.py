@@ -5,10 +5,11 @@ import datetime
 from db_manager import create_meeting
 from scheduler import schedule_meeting_reminder
 
-WAITING_DATE, WAITING_TIME, WAITING_LOCATION, WAITING_RSVP = range(4)
+WAITING_DATE, WAITING_TIME, WAITING_LOCATION = range(3)
 
 def add_meeting(bot, update, chat_data):
     print("start add_meeting")
+    print("update file state:", "CREATING_MEETING")
     t = update.message.text.replace("/add ", "")
     chat_data['event_name'] = t
     bot.send_message(chat_id=update.message.chat_id, text = "Reply this message with the meeting's date in this format: DDMMYY",
@@ -37,14 +38,9 @@ def input_location(bot, update, chat_data):
     chat_data['latitude'] = update.message.location.latitude
     bot.send_message(chat_id=update.message.chat_id, text = "Reply this message with /rsvp to join and /end when done",
                 parse_mode="Markdown")
-    return WAITING_RSVP
+    # Hand over control to a CommandHandler
 
-def input_rsvp(bot, update, chat_data):
-    print("rsvp received")
-    if chat_data.get('attendees') == None:
-        chat_data['attendees'] = []
-    chat_data.get('attendees').append(update.message.from_user.username)
-    return WAITING_RSVP
+    return -1
 
 def end_conversation(bot, update, chat_data):
     print("processing info")
@@ -79,3 +75,10 @@ add_meeting_handler = ConversationHandler(
     },
     fallbacks=[CommandHandler('add', add_meeting)]
 )
+
+def input_rsvp(bot, update, chat_data):
+    print("rsvp received")
+    if chat_data['attendees'] == None:
+        chat_data['attendees'] = []
+    chat_data.get('attendees').append(update.message.from_user.username)
+
