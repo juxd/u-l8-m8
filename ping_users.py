@@ -14,7 +14,8 @@ def send_ping_to_person(bot, username, meeting_id):
     print("{} being pinged".format(username))
     location_button = KeyboardButton("Send Location", request_location=True)
     msg = "Where u @ my nibba?"
-    bot.send_message(username, msg, reply_markup=ReplyKeyboardMarkup([[location_button]]))
+    chat_id = get_chat_id_of_user(username)
+    bot.send_message(chat_id, msg, reply_markup=ReplyKeyboardMarkup([[location_button]]))
     print("Message sent")
 
 def determine_if_user_being_late(bot, update):
