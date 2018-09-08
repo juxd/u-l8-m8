@@ -2,6 +2,7 @@ from telegram.ext import CommandHandler, ConversationHandler, Filters, MessageHa
 from dateutil import parser
 import datetime
 from db_manager import create_meeting
+from scheduler import schedule_meeting_reminder
 
 WAITING_DATE, WAITING_TIME, WAITING_LOCATION = range(3)
 
@@ -96,7 +97,7 @@ def insert_meeting(chat_id, chat_data):
     epoch = datetime.datetime.utcfromtimestamp(0) 
     seconds_since_epoch = int((date - epoch).total_seconds())
     print('before create')
-    create_meeting(chat_id, seconds_since_epoch, chat_data.get('longitude'), chat_data.get('latitude'), chat_data.get('attendees'))
+    meeting_id = create_meeting(chat_id, seconds_since_epoch, chat_data.get('longitude'), chat_data.get('latitude'), chat_data.get('attendees'))
     print('after create')
     return (meeting_id, seconds_since_epoch)
 
