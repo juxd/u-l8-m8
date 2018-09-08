@@ -5,15 +5,16 @@ from telegram import KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import Filters, MessageHandler
 
 def ping_for_loc(bot, meeting_id):
+    print("pinging users")
     username_list = db_manager.get_meeting_username(meeting_id)
     for username in username_list:
-        dispatcher_for_user = Dispatcher(bot)
-        send_ping_to_person(dispatcher_for_user, username, meeting_id)
+        send_ping_to_person(bot, username, meeting_id)
 
-def send_ping_to_person(dispatcher, username, meeting_id):
+def send_ping_to_person(bot, username, meeting_id):
+    print("{} being pinged".format(username))
     location_button = KeyboardButton("Send Location", request_location=True)
     msg = "Where u @ my nibba?"
-    dispatcher.bot.send_message(username, msg, reply_markup=ReplyKeyboardMarkup([location_button]))
+    bot.send_message(username, msg, reply_markup=ReplyKeyboardMarkup([location_button]))
 
 def determine_if_user_being_late(bot, update):
     username = update.message.from_user.username
