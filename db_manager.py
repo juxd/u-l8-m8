@@ -17,7 +17,7 @@ def create_db():
         (meeting_id INTEGER, username TEXT, chat_id INTEGER, is_late INTEGER)""")
 
         c.execute("""CREATE TABLE userTab
-        (people_id INTEGER UNIQUE, chat_id INTEGER, latest_location_latitude REAL, latest_location_longitude REAL)""")
+        (username TEXT UNIQUE, chat_id INTEGER, latest_location_latitude REAL, latest_location_longitude REAL)""")
 
         conn.commit()
         conn.close()
@@ -193,7 +193,7 @@ def update_is_late(meeting_id, username, is_late):
         return False
 
 
-def add_user(people_id, chat_id, latitude=None, longitude=None):
+def add_user(username, chat_id, latitude=None, longitude=None):
     try:
         if latitude is None or longitude is None:
             location = find_user_latest_location(people_id)
@@ -201,9 +201,9 @@ def add_user(people_id, chat_id, latitude=None, longitude=None):
             longitude = location[1]
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
-        param = (people_id, chat_id, latitude, longitude)
+        param = (username, chat_id, latitude, longitude)
 
-        c.execute("""REPLACE INTO userTab(people_id, chat_id latest_location_latitude, latest_location_longitude) 
+        c.execute("""REPLACE INTO userTab(username, chat_id, latest_location_latitude, latest_location_longitude) 
         VALUES (?,?,?,?)""", param)
 
         conn.commit()
@@ -214,13 +214,13 @@ def add_user(people_id, chat_id, latitude=None, longitude=None):
         return False
 
 
-def get_user_chat_id(people_id):
+def get_user_chat_id(username):
     try:
         conn = sqlite3.connect()
         c = conn.cursor()
-        param = (people_id,)
+        param = (username,)
 
-        c.execute("SELECT chat_id FROM userTab WHERE people_id=?", param)
+        c.execute("SELECT chat_id FROM userTab WHERE username=?", param)
 
         chat_id = c.fetchone()[0]
         conn.close()
@@ -230,15 +230,15 @@ def get_user_chat_id(people_id):
         return False
 
 
-def update_user_location(people_id, latitude, longitude):
+def update_user_location(username, latitude, longitude):
     try:
-        chat_id = get_user_chat_id(people_id)
+        chat_id = get_user_chat_id(username)
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
 
-        param = (people_id, chat_id, latitude, longitude)
+        param = (username, chat_id, latitude, longitude)
         
-        c.execute("""REPLACE INTO userTab(people_id, chat_id, latest_location_latitude, latest_location_longitude) 
+        c.execute("""REPLACE INTO userTab(username, chat_id, latest_location_latitude, latest_location_longitude) 
         VALUES (?,?,?,?)""", param)
         conn.commit()
         conn.close()
@@ -246,7 +246,6 @@ def update_user_location(people_id, latitude, longitude):
     except Exception as e:
         print(str(e))
         return False
-
 
 
 def find_user_latest_location(username):
