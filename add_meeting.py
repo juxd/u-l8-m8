@@ -34,9 +34,9 @@ def input_rsvp(bot, update, chat_data):
     if chat_data['attendees'] == None
         chat_data['attendees'] = []
     chat_data['attendees'] = chat_data['attendees'].append(update.message.from_user.username)
-    return
+    return WAITING_RSVP
 
-def process_info(bot, update, chat_data):
+def end_conversation(bot, update, chat_data):
     chat_id = update.message.chat_id
     seconds_since_epoch = insert_meeting(chat_id, chat_data)
     schedule_meeting_reminder(bot, meeting_id, seconds_since_epoch)
@@ -59,7 +59,7 @@ add_meeting_handler = ConversationHandler(
         WAITING_DATE: [MessageHandler(Filters.reply, input_date, pass_chat_data=True)],
         WAITING_TIME: [MessageHandler(Filters.reply, input_time, pass_chat_data=True)],
         WAITING_LOCATION: [MessageHandler(Filters.reply, input_location, pass_chat_data=True)]
-        WAITING_RSVP: [CommandHandler("rsvp", input_rsvp, pass_chat_data=True), CommandHandler("end", process_info, pass_chat_data=True)]
+        WAITING_RSVP: [CommandHandler("rsvp", input_rsvp, pass_chat_data=True), CommandHandler("end", end_conversation, pass_chat_data=True)]
     },
     fallbacks=[CommandHandler('add', add_meeting)]
 )
