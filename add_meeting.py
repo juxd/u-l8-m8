@@ -28,12 +28,16 @@ def input_time(bot, update, chat_data):
 def input_location(bot, update, chat_data):
     chat_data['longitude'] = update.message.location.longitude
     chat_data['latitude'] = update.message.location.latitude
-    insert_meeting(update.message.chat.id, chat_data)
+    process_info(bot, update, chat_data)
+    return
 
-def process_info(bot, update, chat_id, chat_data):
+def process_info(bot, update, chat_data):
+    chat_id = update.message.chat_id
     seconds_since_epoch = insert_meeting(chat_id, chat_data)
     schedule_meeting_reminder(bot, meeting_id, seconds_since_epoch)
 
+# Inserts meeting into database according to chat_data.
+# Returns seconds_since_epoch of the meeting time.
 def insert_meeting(chat_id, chat_data):
     # convert into MM/DD
     date_string = chat_data.get('meeting_date')[2:4] + '/' + chat_data.get('meeting_date')[0:2]
