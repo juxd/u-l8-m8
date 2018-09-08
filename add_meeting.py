@@ -75,15 +75,6 @@ def input_rsvp(bot, update, chat_data):
     chat_data.get('attendees').append(update.message.from_user.username)
     return WAITING_RSVP
 
-def end_conversation(bot, update, chat_data):
-    print("processing info")
-    chat_id = update.message.chat_id
-    meeting_id, seconds_since_epoch = insert_meeting(chat_id, chat_data)
-    print("finish insert_meeting")
-    schedule_meeting_reminder(bot, meeting_id, seconds_since_epoch)
-    print("end end_conversation")
-    return
-	
 # Inserts meeting into database according to chat_data.
 # Returns (meeting_id, seconds_since_epoch)
 def insert_meeting(chat_id, chat_data):
@@ -92,12 +83,17 @@ def insert_meeting(chat_id, chat_data):
     # convert into MM/DD
     #date_string = chat_data.get('meeting_date')[2:4] + '/' + chat_data.get('meeting_date')[0:2]
     #time_string = chat_data.get('meeting_time')[0:2] + ':' + chat_data.get('meeting_time')[2:4]
-    date_string = char_data.get('meeting_date')[0:5]
+    date_string = chat_data.get('meeting_date')[0:5]
+    print(date_string)
     time_string = chat_data.get('meeting_time')[0:5]
+    print(time_string)
     date = parser.parse(date_string + ' ' + time_string)
+    print(date)
     epoch = datetime.datetime.utcfromtimestamp(0) 
     seconds_since_epoch = int((date - epoch).total_seconds())
+    print('before create')
     create_meeting(chat_id, seconds_since_epoch, chat_data.get('longitude'), chat_data.get('latitude'), chat_data.get('attendees'))
+    print('after create')
     return (meeting_id, seconds_since_epoch)
 
 
@@ -129,7 +125,7 @@ def end_rsvp(bot, update, chat_data):
         print("not in rsvp state, stopping end_rsvp")
     print("starting end_rsvp")
     chat_id = update.message.chat_id
-    meeting_id, seconds_since_epoch = insert_meeting(chat_id, chat_data)
+    (meeting_id, seconds_since_epoch) = insert_meeting(chat_id, chat_data)
     print("finish insert_meeting")
     schedule_meeting_reminder(bot, meeting_id, seconds_since_epoch)
     print("finish schedule_meeting_reminder")
