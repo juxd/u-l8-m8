@@ -14,4 +14,4 @@ verify_ssl = true
 googlemaps = "*"
 requests = "*"
 python-telegram-bot = "*"
-dateutil = "*"
+python-dateutil = "*"
