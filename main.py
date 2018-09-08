@@ -1,5 +1,5 @@
 from credentials import api_key
-from init import *
+from helper import *
 import logging
 from telegram.ext import Updater
 from telegram.ext import MessageHandler, CommandHandler, Filters
