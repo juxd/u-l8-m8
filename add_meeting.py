@@ -3,15 +3,6 @@ from dateutil import parser
 
 WAITING_DATE, WAITING_TIME, WAITING_LOCATION = range(3)
 
-# Keep meeting information in memory
-# store = {
-#         'event_name': None,
-#         'meeting_time': None,
-#         'meeting_date': None,
-#         'lat': None,
-#         'lon': None
-#         }
-
 def add_meeting(bot, update, chat_data):
     t = update.message.text.replace("/add ", "")
     chat_data['event_name'] = t
@@ -33,7 +24,7 @@ def input_time(bot, update, chat_data):
 
 def input_location(bot, update, chat_data):
     chat_data['longitude'] = update.message.location.longitude
-    chat_data['lantitude'] = update.message.location.latitude
+    chat_data['latitude'] = update.message.location.latitude
     insert_meeting(update.message.chat.id, chat_data)
     return
 
@@ -44,7 +35,7 @@ def insert_meeting(chat_id, chat_data):
     date = parser.parse(date_string + ' ' + time_string)
     epoch = datetime.datetime.utcfromtimestamp(0) 
     seconds_since_epoch = int((date - epoch).total_seconds())
-    create_meeting(chat_id, seconds_since_epoch, chat_data.get('lon'), chat_data.get('lat'), [])
+    create_meeting(chat_id, seconds_since_epoch, chat_data.get('longitude'), chat_data.get('latitude'), [])
 
 
 add_meeting_handler = ConversationHandler(
