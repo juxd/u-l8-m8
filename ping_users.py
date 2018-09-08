@@ -15,8 +15,9 @@ def send_ping_to_person(dispatcher, user_id, meeting_id):
     bot.send_message(user_id, msg, reply_markup=ReplyKeyboardMarkup([location_button]))
 
 def store_location(bot, update):
-    user_id = update.message.from_user.id
-    meeting_id = db_manager.get_latest_meeting(user_id)
-    db_manager.store_location(user_id, message, meeting_id, message.location)
+    user_id = db_manager.find_user_id_from_chat(update.message.chat.id)
+    location = update.message.location
+    meeting_id = db_manager.find_user_latest_meeting(user_id)
+    db_manager.update_user_location(user_id, location.latitude, location.longitude)
 
 user_handler = MessageHandler(Filters.location, callback=store_location)
