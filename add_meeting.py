@@ -1,6 +1,6 @@
-from telegram.ext import MessageHandler, CommandHandler, Filters
+from telegram.ext import CommandHandler, ConversationHandler, Filters, MessageHandler
 
-WAITING_DATE, WAITING_TIME, WAITING_LOCATION = range(2)
+WAITING_DATE, WAITING_TIME, WAITING_LOCATION = range(3)
 
 def add_meeting(bot, update):
     event_name = update.message.text.replace("/add ", "")
