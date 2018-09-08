@@ -5,7 +5,7 @@ from add_meeting import *
 from credentials import api_key
 from helpers import *
 from ping_users import user_handler
-from db_manager import create_db
+from db_manager import create_db, add_user
 
 print("Bot started.") # Init message.
 
@@ -31,7 +31,7 @@ def start_callback(bot, update):
         bot.send_message(chat_id=update.message.chat_id, text="Hello! Click start to allow me to pm you", reply_markup=reply_markup)
     else:
         greeting = "Hello {}, you've been successfully added to u_l8_m8!".format(update.message.from_user.username)
-        add_chat_id_to_user(update.message.chat_id, update.message.from_user.username)
+        add_user(update.message.from_user.username, update.message.chat_id)
         bot.send_message(chat_id=update.message.chat_id, text=greeting)
 
 start_handler = CommandHandler("start", start_callback)

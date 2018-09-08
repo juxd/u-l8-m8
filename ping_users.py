@@ -13,8 +13,8 @@ def ping_for_loc(bot, meeting_id):
 def send_ping_to_person(bot, username, meeting_id):
     print("{} being pinged".format(username))
     location_button = KeyboardButton("Send Location", request_location=True)
-    msg = "Where u @ my nibba?"
-    chat_id = get_chat_id_of_user(username)
+    msg = "Where u @?"
+    chat_id = get_user_chat_id(username)
     bot.send_message(chat_id, msg, reply_markup=ReplyKeyboardMarkup([[location_button]]))
     print("Message sent")
 
