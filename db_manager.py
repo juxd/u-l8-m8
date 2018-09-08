@@ -27,6 +27,7 @@ def create_db():
 
 
 def create_meeting(group_id, meeting_time, latitude, longitude, username_list):
+    # given the parameters, this function creates a meeting in meetingTab and returns the autoincremented meeting_id
     try:
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
@@ -46,6 +47,7 @@ def create_meeting(group_id, meeting_time, latitude, longitude, username_list):
 
 
 def add_user_to_meeting(meeting_id, username):
+    # add a user to an existing meeting based on meeting_id and username
     try:
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
@@ -62,6 +64,7 @@ def add_user_to_meeting(meeting_id, username):
 
 
 def get_meeting_time(meeting_id):
+    # returns meeting time in unix time give meeting id
     try:
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
@@ -79,6 +82,7 @@ def get_meeting_time(meeting_id):
 
 
 def get_meeting_location(meeting_id):
+    # returns meeting location in a tuple (lat, long) given meeting id
     try:
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
@@ -96,6 +100,7 @@ def get_meeting_location(meeting_id):
 
 
 def get_meeting_group_id(meeting_id):
+    # returns the group chat id based on meeting id
     try:
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
@@ -113,6 +118,7 @@ def get_meeting_group_id(meeting_id):
 
 
 def get_meeting_username(meeting_id):
+    # returns a list of username of people involved in a meeting
     try:
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
@@ -132,6 +138,7 @@ def get_meeting_username(meeting_id):
 
 
 def get_is_late(meeting_id, username):
+    # returns a bool indicating whether a user is going to be late to a specific meeting
     try:
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
@@ -150,6 +157,7 @@ def get_is_late(meeting_id, username):
 
 
 def update_is_late(meeting_id, username, is_late):
+    # update if a user is going to be late, provided the meeting_id and username
     try:
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
@@ -170,6 +178,7 @@ def update_is_late(meeting_id, username, is_late):
 
 
 def update_user_location(username, latitude, longitude):
+    # update a user's latest location, given username, lat and long
     try:
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
@@ -186,6 +195,7 @@ def update_user_location(username, latitude, longitude):
 
 
 def find_user_latest_location(username):
+    # get a user's latest location, in tuple (lat, long)
     try:
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
@@ -201,6 +211,7 @@ def find_user_latest_location(username):
 
 
 def find_user_latest_meeting(username):
+    # get the meeting_id of the meeting that is closest to the user on the timeline in the near future
     try:
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
