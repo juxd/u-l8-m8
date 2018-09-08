@@ -1,14 +1,12 @@
 from credentials import api_key
 from init import *
-import telegram
-import config
 import logging
 from telegram.ext import Updater
 from telegram.ext import MessageHandler, CommandHandler, Filters
 
 # Set up bot to start listening.
 bot = telegram.Bot(token=api_key)
-updater = Updater(token=config.token)
+updater = Updater(token=api_key)
 dispatcher = updater.dispatcher
 print("Bot started.") # Init message.
 
