@@ -7,7 +7,7 @@ def reply_suggestions(bot, meeting_id):
     group_id = db_manager.get_meeting_group_id(meeting_id)
 
     on_time_list = [db_manager.get_is_late(meeting_id, u) for u in users]
-    ratio_on_time = len(filter(lambda x: x == False, on_time_list)) / len(on_time_list)
+    ratio_on_time = len(list(filter(lambda x: x == False, on_time_list))) / len(on_time_list)
     if ratio_on_time > 0.5:
        # Send group message that most people are on time.
         message = "Most of the people are on time, YAY! The meeting is happening!"
