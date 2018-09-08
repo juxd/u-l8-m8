@@ -216,7 +216,7 @@ def add_user(username, chat_id, latitude=None, longitude=None):
 
 def get_user_chat_id(username):
     try:
-        conn = sqlite3.connect()
+        conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
         param = (username,)
 
@@ -305,9 +305,12 @@ def find_user_latest_meeting(username):
 # update_is_late(1,'a',True)
 # get_is_late(1,'a')
 #
+# add_user('b', 1)
 # update_user_location('b',1,1)
 # find_user_latest_location('b')
 # update_user_location('b',2,2)
 # find_user_latest_location('b')
 # find_user_latest_meeting('b')
+
+
 
