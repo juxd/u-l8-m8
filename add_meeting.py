@@ -37,9 +37,9 @@ def input_date(bot, update, chat_data):
     print("start input_date")
     date = update.message.text
     if error_date(date):
-        bot.send_message(chat_id=update.message.chat_id, text = "You did not follow my instructions or keyed wrongly! Start over!",
+        bot.send_message(chat_id=update.message.chat_id, text = "You did not follow my instructions or keyed wrongly! Reply to this message in the right format!",
                 parse_mode="Markdown")
-        return -1
+        return WAITING_DATE
     else:
         chat_data['meeting_date'] = date 
         bot.send_message(chat_id=update.message.chat_id, text = "Reply this message with the meeting's time in this format: HH:MM",
@@ -50,9 +50,9 @@ def input_time(bot, update, chat_data):
     print("start input_time")
     time = update.message.text
     if error_time(time):
-        bot.send_message(chat_id=update.message.chat_id, text = "You did not follow my instructions or keyed wrongly! Start over!",
+        bot.send_message(chat_id=update.message.chat_id, text = "You did not follow my instructions or keyed wrongly! Reply to this message in the right format!",
                 parse_mode="Markdown")
-        return -1
+        return WAITING_TIME
     else:
         chat_data['meeting_time'] = time
         bot.send_message(chat_id=update.message.chat_id, text = "Reply this message with attachment of the location",
@@ -62,9 +62,9 @@ def input_time(bot, update, chat_data):
 def input_location(bot, update, chat_data):
     print("go fuck yourself")
     if update.message.location is None:
-        bot.send_message(chat_id=update.message.chat_id, text = "That's not a location! Start over!",
+        bot.send_message(chat_id=update.message.chat_id, text = "That's not a location! Reply to this message with a proper location!",
                 parse_mode="Markdown")
-        return -1
+        return WAITING_LOCATION
     chat_data['longitude'] = update.message.location.longitude
     chat_data['latitude'] = update.message.location.latitude
     bot.send_message(chat_id=update.message.chat_id, text = "Reply this message with /rsvp to join and /end when done",
