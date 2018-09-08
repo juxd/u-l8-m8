@@ -13,8 +13,8 @@ def create_db():
         (meeting_id INTEGER PRIMARY KEY, meeting_time INTEGER, meeting_location_latitude REAL, 
         meeting_location_longitude REAL, group_id INTEGER)""")
 
-        c.execute("""CREATE TABLE inTab 
-        (meeting_id INTEGER, username TEXT, is_late INTEGER)""")
+        c.execute("""CREATE TABLE inTab
+        (meeting_id INTEGER, username TEXT, chat_id INTEGER, is_late INTEGER)""")
 
         c.execute("""CREATE TABLE userTab
         (username TEXT UNIQUE, latest_location_latitude REAL, latest_location_longitude REAL)""")
@@ -62,6 +62,22 @@ def add_user_to_meeting(meeting_id, username):
         print(str(e))
         return False
 
+
+def add_chat_id_to_user(chat_id, username):
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    param = (chat_id, username)
+    c.execute("UPDATE inTab SET chat_id = ? WHERE username = ?", param)
+    conn.close()
+
+def get_chat_id_of_user(username):
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+
+    c.execute("SELECT chat_id FROM inTab WHERE username=?", username)
+    chat_id = c.fetchone()[0]
+    conn.close()
+    return chat_id
 
 def get_meeting_time(meeting_id):
     # returns meeting time in unix time give meeting id
