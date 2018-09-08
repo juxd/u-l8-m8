@@ -1,5 +1,5 @@
 from credentials import api_key
-from init import *
+from helpers import *
 from telegram.ext import Updater
 from telegram.ext import MessageHandler, Filters
 
@@ -7,4 +7,6 @@ from telegram.ext import MessageHandler, Filters
 bot = get_bot()
 updater = Updater(token=api_key)
 updater.start_polling()
-print("Bot started.") # Init message.
+
+# Init message
+print("Bot started.") 
