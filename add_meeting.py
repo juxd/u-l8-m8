@@ -60,6 +60,10 @@ def input_time(bot, update, chat_data):
 
 def input_location(bot, update, chat_data):
     print("go fuck yourself")
+    if update.message.location is None:
+        bot.send_message(chat_id=update.message.chat_id, text = "That's not a location! Start over!",
+                parse_mode="Markdown")
+        return -1
     chat_data['longitude'] = update.message.location.longitude
     chat_data['latitude'] = update.message.location.latitude
     bot.send_message(chat_id=update.message.chat_id, text = "Reply this message with /rsvp to join and /end when done",
@@ -93,7 +97,7 @@ def insert_meeting(chat_id, chat_data):
     #date_string = chat_data.get('meeting_date')[2:4] + '/' + chat_data.get('meeting_date')[0:2]
     #time_string = chat_data.get('meeting_time')[0:2] + ':' + chat_data.get('meeting_time')[2:4]
     date_string = char_data.get('meeting_date')[0:5]
-    time_string = chat_data.get('meeting_time')[0:5]
+    time_string = char_data.get('meeting_time')[0:5]
     date = parser.parse(date_string + ' ' + time_string)
     epoch = datetime.datetime.utcfromtimestamp(0) 
     seconds_since_epoch = int((date - epoch).total_seconds())
