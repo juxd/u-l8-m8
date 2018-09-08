@@ -1,6 +1,8 @@
 from telegram.ext import CommandHandler, ConversationHandler, Filters, MessageHandler
 from dateutil import parser
 
+from db_manager import create_meeting
+
 WAITING_DATE, WAITING_TIME, WAITING_LOCATION = range(3)
 
 def add_meeting(bot, update, chat_data):
