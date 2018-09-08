@@ -29,7 +29,10 @@ def input_location(bot, update, chat_data):
     chat_data['longitude'] = update.message.location.longitude
     chat_data['latitude'] = update.message.location.latitude
     insert_meeting(update.message.chat.id, chat_data)
-    return
+
+def process_info(bot, update, chat_id, chat_data):
+    seconds_since_epoch = insert_meeting(chat_id, chat_data)
+    schedule_meeting_reminder(bot, meeting_id, seconds_since_epoch)
 
 def insert_meeting(chat_id, chat_data):
     # convert into MM/DD
@@ -39,7 +42,7 @@ def insert_meeting(chat_id, chat_data):
     epoch = datetime.datetime.utcfromtimestamp(0) 
     seconds_since_epoch = int((date - epoch).total_seconds())
     create_meeting(chat_id, seconds_since_epoch, chat_data.get('longitude'), chat_data.get('latitude'), [])
-
+    return seconds_since_epoch
 
 add_meeting_handler = ConversationHandler(
     entry_points=[CommandHandler('add', add_meeting, pass_chat_data=True)],
