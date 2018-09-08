@@ -3,6 +3,7 @@ from dateutil import parser
 import datetime
 
 from db_manager import create_meeting
+from scheduler import schedule_meeting_reminder
 
 WAITING_DATE, WAITING_TIME, WAITING_LOCATION, WAITING_RSVP = range(4)
 
@@ -40,7 +41,7 @@ def input_location(bot, update, chat_data):
 
 def input_rsvp(bot, update, chat_data):
     print("rsvp received")
-    if chat_data['attendees'] == None:
+    if chat_data.get('attendees') == None:
         chat_data['attendees'] = []
     chat_data.get('attendees').append(update.message.from_user.username)
     return WAITING_RSVP
@@ -48,15 +49,16 @@ def input_rsvp(bot, update, chat_data):
 def end_conversation(bot, update, chat_data):
     print("processing info")
     chat_id = update.message.chat_id
-    seconds_since_epoch = insert_meeting(chat_id, chat_data)
+    meeting_id, seconds_since_epoch = insert_meeting(chat_id, chat_data)
     print("finish insert_meeting")
     schedule_meeting_reminder(bot, meeting_id, seconds_since_epoch)
     print("end end_conversation")
     return
 
 # Inserts meeting into database according to chat_data.
-# Returns seconds_since_epoch of the meeting time.
+# Returns (meeting_id, seconds_since_epoch)
 def insert_meeting(chat_id, chat_data):
+    print(chat_data)
     print("start insert_meeting")
     # convert into MM/DD
     date_string = chat_data.get('meeting_date')[2:4] + '/' + chat_data.get('meeting_date')[0:2]
@@ -64,8 +66,8 @@ def insert_meeting(chat_id, chat_data):
     date = parser.parse(date_string + ' ' + time_string)
     epoch = datetime.datetime.utcfromtimestamp(0) 
     seconds_since_epoch = int((date - epoch).total_seconds())
-    create_meeting(chat_id, seconds_since_epoch, chat_data.get('longitude'), chat_data.get('latitude'), chat_data.get('attendees'))
-    return seconds_since_epoch
+    meeting_id = create_meeting(chat_id, seconds_since_epoch, chat_data.get('longitude'), chat_data.get('latitude'), chat_data.get('attendees'))
+    return (meeting_id, seconds_since_epoch)
 
 add_meeting_handler = ConversationHandler(
     entry_points=[CommandHandler('add', add_meeting, pass_chat_data=True)],
