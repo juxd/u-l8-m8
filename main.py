@@ -20,3 +20,17 @@ dispatcher.add_handler(user_handler)
 create_db()
 updater.start_polling()
 print("Bot started.") # Init message.
+
+def build_menu(buttons,n_cols,header_buttons=None,footer_buttons=None):
+    menu = [buttons[i:i + n_cols] for i in range(0, len(buttons), n_cols)]
+    if header_buttons:
+        menu.insert(0, header_buttons)
+    if footer_buttons:
+        menu.append(footer_buttons)
+    return menu
+
+button_list = [
+    InlineKeyboardButton("Talk to me before you reply this message!", url = "https://telegram.me/u-l8-m8-bot")
+]
+reply_markup = InlineKeyboardMarkup(build_menu(button_list, n_cols=1))
+bot.send_message(chat_id=update.message.chat_id, "Hello! Click start to allow me to pm you", reply_markup=reply_markup)
