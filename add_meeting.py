@@ -67,16 +67,18 @@ add_meeting_handler = ConversationHandler(
 )
 
 def input_rsvp(bot, update, chat_data):
+    print('chat_data @ input_rsvp', chat_data)
     print("rsvp checking")
     if open('state.txt', "r").read() != 'RSVP':
         print("not in rsvp state, stopping input_rsvp")
         return
     print("rsvp received")
-    if chat_data['attendees'] == None:
+    if chat_data.get('attendees') == None:
         chat_data['attendees'] = []
     chat_data.get('attendees').append(update.message.from_user.username)
 
 def end_rsvp(bot, update, chat_data):
+    print('chat_data @ end_rsvp', chat_data)
     print("checking end_rsvp")
     if open('state.txt', "r").read() != 'RSVP':
         print("not in rsvp state, stopping end_rsvp")
@@ -92,4 +94,4 @@ def end_rsvp(bot, update, chat_data):
 
 
 rsvp_handler = CommandHandler("rsvp", input_rsvp, pass_chat_data=True)
-end_rsvp_hanlder = CommandHandler("end", end_rsvp, pass_chat_data=True)
+end_rsvp_handler = CommandHandler("end", end_rsvp, pass_chat_data=True)
