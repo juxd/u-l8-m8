@@ -16,7 +16,8 @@ def input_date(bot, update):
 
 def input_location(bot, update):
     #somehow get one location
-    location = update.message.location 
+    long = update.message.location.longitude
+    lan = update.message.location.latitude
     return
 
 add_meeting_handler = ConversationHandler(
