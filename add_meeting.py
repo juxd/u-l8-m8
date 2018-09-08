@@ -13,16 +13,10 @@ WAITING_DATE, WAITING_TIME, WAITING_LOCATION = range(3)
 #         }
 
 def add_meeting(bot, update, chat_data):
-    print("a") # Init message.
     t = update.message.text.replace("/add ", "")
-    print(chat_data)
-    print("a1") # Init message.update.message.text.replace("/add ", "")
     chat_data['event_name'] = t
-    print(chat_data)
-    print("b") # Init message.
     bot.send_message(chat_id=update.message.chat_id, text = "Reply this message with the meeting's date in this format: DDMMYY",
                     parse_mode="Markdown")
-    print("c") # Init message.
     return WAITING_DATE
 
 def input_date(bot, update, chat_data):
@@ -40,7 +34,7 @@ def input_time(bot, update, chat_data):
 def input_location(bot, update, chat_data):
     chat_data['longitude'] = update.message.location.longitude
     chat_data['lantitude'] = update.message.location.latitude
-    insert_meeting(update.message.chat.id)
+    insert_meeting(update.message.chat.id, chat_data)
     return
 
 def insert_meeting(chat_id, chat_data):
