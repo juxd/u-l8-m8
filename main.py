@@ -11,13 +11,13 @@ def add_input(bot, update):
     dispatcher.add_handler(date_handler)
 
 def collect_date(bot, update):
-    date = update.message.text;
+    date = update.message.text
     bot.send_message(chat_id=update.message.chat_id, text = "Reply this message with the meeting's time in this format: HH:MM",
                 parse_mode="Markdown")
     dispatcher.add_handler(time_handler)
     
 def collect_time(bot, update):
-    time = update.message.text;
+    time = update.message.text
     bot.send_message(chat_id=update.message.chat_id, text = "Reply this message with the location of meeting",
                 parse_mode="Markdown")
     dispatcher.add_handler(location_handler)
