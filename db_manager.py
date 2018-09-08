@@ -17,7 +17,7 @@ def create_db():
         (meeting_id INTEGER, people_id INTEGER, is_late INTEGER)""")
 
         c.execute("""CREATE TABLE userTab
-        (people_id INTEGER UNIQUE, latest_location_latitude REAL, latest_location_longitude REAL)""")
+        (people_id INTEGER UNIQUE, chat_id INTEGER, latest_location_latitude REAL, latest_location_longitude REAL)""")
 
         conn.commit()
         conn.close()
@@ -42,6 +42,20 @@ def create_meeting(group_id, meeting_time, latitude, longitude, people_id_list):
 
     except Exception as e:
         print (str(e))
+        return False
+
+
+def add_people_into_meeting(meeting_id, people_id):
+    try:
+        conn = sqlite3.connect()
+        c = conn.cursor()
+        param = (meeting_id, people_id, 0)
+        c.execute("INSERT INTO inTab (meeting_id, people_id, is_late) VALUES (?,?,?)", param)
+        conn.commit()
+        conn.close()
+        return True
+    except Exception as e:
+        print(str(e))
         return False
 
 
@@ -152,14 +166,52 @@ def update_is_late(meeting_id, people_id, is_late):
         return False
 
 
-def update_user_location(people_id, latitude, longitude):
+def add_user(people_id, chat_id, latitude=None, longitude=None):
     try:
+        if latitude is None or longitude is None:
+            location = find_user_latest_location(people_id)
+            latitude = location[0]
+            longitude = location[1]
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
-        param = (people_id, latitude, longitude)
+        param = (people_id, chat_id, latitude, longitude)
+
+        c.execute("""REPLACE INTO userTab(people_id, chat_id latest_location_latitude, latest_location_longitude) 
+        VALUES (?,?,?,?)""", param)
+
+        conn.commit()
+        conn.close()
+        return True
+    except Exception as e:
+        print(str(e))
+        return False
+
+
+def get_user_chat_id(people_id):
+    try:
+        conn = sqlite3.connect()
+        c = conn.cursor()
+        param = (people_id,)
+
+        c.execute("SELECT chat_id FROM userTab WHERE people_id=?", param)
+
+        chat_id = c.fetchone()[0]
+        conn.close()
+        return chat_id
+    except Exception as e:
+        print(str(e))
+        return False
+
+
+def update_user_location(people_id, latitude, longitude):
+    try:
+        chat_id = get_user_chat_id(people_id)
+        conn = sqlite3.connect(DB_NAME)
+        c = conn.cursor()
+        param = (people_id, chat_id, latitude, longitude)
         
-        c.execute("""REPLACE INTO userTab(people_id, latest_location_latitude, latest_location_longitude) 
-        VALUES (?,?,?)""", param)
+        c.execute("""REPLACE INTO userTab(people_id, chat_id, latest_location_latitude, latest_location_longitude) 
+        VALUES (?,?,?,?)""", param)
         conn.commit()
         conn.close()
 
@@ -211,7 +263,7 @@ def find_user_latest_meeting(people_id):
         return False
 
 # create_db()
-# create_meeting(1,1,1,1,[1,2,3,4])
+# create_meeting(-1,1,None,None,[])
 # get_meeting_time(2)
 # get_meeting_location(2)
 # get_meeting_group_id(2)
