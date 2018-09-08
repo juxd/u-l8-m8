@@ -7,7 +7,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 s = BackgroundScheduler()
 s.start()
 
-def schedule_meeting_reminder(bot, meeting_id, time):
+def schedule_meeting_reminder(bot, meeting_id, meeting_time):
     print("scheduling")
     thirty_mins_before = int(time.time()) + 5
 
