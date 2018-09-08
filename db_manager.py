@@ -47,9 +47,9 @@ def create_meeting(group_id, meeting_time, latitude, longitude, username_list):
 
 def add_user_to_meeting(meeting_id, username):
     try:
-        conn = sqlite3.connect()
+        conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
-        param = (meeting_id. username, 0)
+        param = (meeting_id, username, 0)
         c.execute("INSERT INTO inTab (meeting_id, username, is_late) VALUES (?,?,?)", param)
 
         conn.commit()
@@ -229,18 +229,21 @@ def find_user_latest_meeting(username):
         return False
 
 # create_db()
-# create_meeting(1,1,1,1,[1,2,3,4])
-# get_meeting_time(2)
-# get_meeting_location(2)
-# get_meeting_group_id(2)
-# get_meeting_username(2)
-# get_is_late(2,2)
-# update_is_late(2,2,True)
-# get_is_late(2,2)
+# create_meeting(1,1,1,1,['a','b','c'])
 #
-# update_user_location(1,1,1)
-# find_user_latest_location(1)
-# update_user_location(1,2,2)
-# find_user_latest_location(1)
-# find_user_latest_meeting(1)
+# get_meeting_time(1)
+# get_meeting_location(1)
+# get_meeting_group_id(1)
+# get_meeting_username(1)
+#
+# add_user_to_meeting(1,"d")
+# get_is_late(1,'a')
+# update_is_late(1,'a',True)
+# get_is_late(1,'a')
+#
+# update_user_location('b',1,1)
+# find_user_latest_location('b')
+# update_user_location('b',2,2)
+# find_user_latest_location('b')
+# find_user_latest_meeting('b')
 
