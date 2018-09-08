@@ -1,4 +1,5 @@
 from telegram.ext import CommandHandler, ConversationHandler, Filters, MessageHandler
+from dateutil import parser
 
 WAITING_DATE, WAITING_TIME, WAITING_LOCATION = range(3)
 
@@ -34,6 +35,17 @@ def input_location(bot, update):
     store.set('lantitude', update.message.location.latitude)
     insert_meeting(update.message.chat.id)
     return
+
+def insert_meeting(chat_id):
+    # convert into MM/DD
+    date_string = store.get('meeting_date')[2:4] + '/' + store.get('meeting_date')[0:2]
+    time_string = store.get('meeting_time')[0:2] + ':' + store.get('meeting_time')[2:4]
+    date = parser.parse(date_string + ' ' + time_string)
+    epoch = datetime.datetime.utcfromtimestamp(0) 
+    seconds_since_epoch = int((date - epoch).total_seconds())
+
+    create_meeting(chat_id, seconds_since_epoch, store.get('lon'), store.get('lat'), [])
+
 
 add_meeting_handler = ConversationHandler(
     entry_points=[CommandHandler('add', add_meeting)],
