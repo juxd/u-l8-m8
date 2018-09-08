@@ -293,24 +293,24 @@ def find_user_latest_meeting(username):
         return False
 
 # create_db()
-create_meeting(1,1,1,1,['a','b','c'])
-
-get_meeting_time(1)
-get_meeting_location(1)
-get_meeting_group_id(1)
-get_meeting_username(1)
-
-add_user_to_meeting(1,"d")
-get_is_late(1,'a')
-update_is_late(1,'a',True)
-get_is_late(1,'a')
-
-add_user('b', 1)
-update_user_location('b',1,1)
-find_user_latest_location('b')
-update_user_location('b',2,2)
-find_user_latest_location('b')
-find_user_latest_meeting('b')
+# create_meeting(1,1,1,1,['a','b','c'])
+#
+# get_meeting_time(1)
+# get_meeting_location(1)
+# get_meeting_group_id(1)
+# get_meeting_username(1)
+#
+# add_user_to_meeting(1,"d")
+# get_is_late(1,'a')
+# update_is_late(1,'a',True)
+# get_is_late(1,'a')
+#
+# add_user('b', 1)
+# update_user_location('b',1,1)
+# find_user_latest_location('b')
+# update_user_location('b',2,2)
+# find_user_latest_location('b')
+# find_user_latest_meeting('b')
 
 
 
