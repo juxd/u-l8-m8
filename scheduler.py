@@ -3,6 +3,7 @@ from ping_users import ping_for_loc
 from reply_suggestions import reply_suggestions
 
 def schedule_meeting_reminder(bot, meeting_id, time):
+    print("scheduling")
     s = sched.scheduler()
     thirty_mins_before = time - 60 * 30
 

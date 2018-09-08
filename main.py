@@ -46,4 +46,5 @@ dispatcher.add_handler(user_handler)
 
 # Start up
 create_db()
+print("init success")
 updater.start_polling()

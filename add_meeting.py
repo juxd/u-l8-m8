@@ -31,23 +31,22 @@ def input_time(bot, update, chat_data):
     return WAITING_LOCATION
 
 def input_location(bot, update, chat_data):
-    print("start input_location")
+    print("go fuck yourself")
     chat_data['longitude'] = update.message.location.longitude
     chat_data['latitude'] = update.message.location.latitude
-    print('lat:', update.message.location.latitude)
-    print('lon:', update.message.location.longitude)
+    bot.send_message(chat_id=update.message.chat_id, text = "Reply this message with /rsvp to join and /end when done",
+                parse_mode="Markdown")
     return WAITING_RSVP
 
 def input_rsvp(bot, update, chat_data):
-    print("start input_rsvp")
-    if chat_data['attendees'] == None
+    print("rsvp received")
+    if chat_data['attendees'] == None:
         chat_data['attendees'] = []
     chat_data['attendees'] = chat_data['attendees'].append(update.message.from_user.username)
-    print('added user:', update.message.from_user.username)
     return WAITING_RSVP
 
 def end_conversation(bot, update, chat_data):
-    print("start end_conversation")
+    print("processing info")
     chat_id = update.message.chat_id
     seconds_since_epoch = insert_meeting(chat_id, chat_data)
     schedule_meeting_reminder(bot, meeting_id, seconds_since_epoch)
