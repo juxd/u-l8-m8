@@ -4,7 +4,7 @@ import datetime
 
 from db_manager import create_meeting
 
-WAITING_DATE, WAITING_TIME, WAITING_LOCATION = range(3)
+WAITING_DATE, WAITING_TIME, WAITING_LOCATION, WAITING_RSVP = range(4)
 
 def add_meeting(bot, update, chat_data):
     t = update.message.text.replace("/add ", "")
@@ -28,7 +28,12 @@ def input_time(bot, update, chat_data):
 def input_location(bot, update, chat_data):
     chat_data['longitude'] = update.message.location.longitude
     chat_data['latitude'] = update.message.location.latitude
-    process_info(bot, update, chat_data)
+    return WAITING_RSVP
+
+def input_rsvp(bot, update, chat_data):
+    if chat_data['attendees'] == None
+        chat_data['attendees'] = []
+    chat_data['attendees'] = chat_data['attendees'].append(update.message.from_user.username)
     return
 
 def process_info(bot, update, chat_data):
@@ -45,7 +50,7 @@ def insert_meeting(chat_id, chat_data):
     date = parser.parse(date_string + ' ' + time_string)
     epoch = datetime.datetime.utcfromtimestamp(0) 
     seconds_since_epoch = int((date - epoch).total_seconds())
-    create_meeting(chat_id, seconds_since_epoch, chat_data.get('longitude'), chat_data.get('latitude'), [])
+    create_meeting(chat_id, seconds_since_epoch, chat_data.get('longitude'), chat_data.get('latitude'), chat_data['attendees'])
     return seconds_since_epoch
 
 add_meeting_handler = ConversationHandler(
@@ -54,6 +59,7 @@ add_meeting_handler = ConversationHandler(
         WAITING_DATE: [MessageHandler(Filters.reply, input_date, pass_chat_data=True)],
         WAITING_TIME: [MessageHandler(Filters.reply, input_time, pass_chat_data=True)],
         WAITING_LOCATION: [MessageHandler(Filters.reply, input_location, pass_chat_data=True)]
+        WAITING_RSVP: [CommandHandler("rsvp", input_rsvp, pass_chat_data=True), CommandHandler("end", process_info, pass_chat_data=True)]
     },
     fallbacks=[CommandHandler('add', add_meeting)]
 )
