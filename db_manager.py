@@ -22,7 +22,7 @@ def create_db():
         print str(e)
 
 
-def createMeeting(groupID, meetingTime, latitude, longitude, peopleIDList):
+def create_meeting(groupID, meetingTime, latitude, longitude, peopleIDList):
     try:
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
@@ -39,7 +39,8 @@ def createMeeting(groupID, meetingTime, latitude, longitude, peopleIDList):
     except Exception as e:
         print str(e)
 
-def getMeetingTime(meetingID):
+
+def get_meeting_time(meetingID):
     try:
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
