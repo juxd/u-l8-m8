@@ -7,6 +7,7 @@ from db_manager import create_meeting
 WAITING_DATE, WAITING_TIME, WAITING_LOCATION, WAITING_RSVP = range(4)
 
 def add_meeting(bot, update, chat_data):
+    print("start add_meeting")
     t = update.message.text.replace("/add ", "")
     chat_data['event_name'] = t
     bot.send_message(chat_id=update.message.chat_id, text = "Reply this message with the meeting's date in this format: DDMMYY",
@@ -14,36 +15,49 @@ def add_meeting(bot, update, chat_data):
     return WAITING_DATE
 
 def input_date(bot, update, chat_data):
+    print("start input_date")
     chat_data['meeting_date'] = update.message.text
+    print('date:', update.message.text)
     bot.send_message(chat_id=update.message.chat_id, text = "Reply this message with the meeting's time in this format: HHMM",
                 parse_mode="Markdown")
     return WAITING_TIME
 
 def input_time(bot, update, chat_data):
+    print("start input_time")
     chat_data['meeting_time'] = update.message.text
+    print('time:', update.message.text)
     bot.send_message(chat_id=update.message.chat_id, text = "Reply this message with attachment of the location",
                 parse_mode="Markdown")
     return WAITING_LOCATION
 
 def input_location(bot, update, chat_data):
+    print("start input_location")
     chat_data['longitude'] = update.message.location.longitude
     chat_data['latitude'] = update.message.location.latitude
+    print('lat:', update.message.location.latitude)
+    print('lon:', update.message.location.longitude)
     return WAITING_RSVP
 
 def input_rsvp(bot, update, chat_data):
+    print("start input_rsvp")
     if chat_data['attendees'] == None
         chat_data['attendees'] = []
     chat_data['attendees'] = chat_data['attendees'].append(update.message.from_user.username)
+    print('added user:', update.message.from_user.username)
     return WAITING_RSVP
 
 def end_conversation(bot, update, chat_data):
+    print("start end_conversation")
     chat_id = update.message.chat_id
     seconds_since_epoch = insert_meeting(chat_id, chat_data)
     schedule_meeting_reminder(bot, meeting_id, seconds_since_epoch)
+    print("end end_conversation")
+    return
 
 # Inserts meeting into database according to chat_data.
 # Returns seconds_since_epoch of the meeting time.
 def insert_meeting(chat_id, chat_data):
+    print("start insert_meeting")
     # convert into MM/DD
     date_string = chat_data.get('meeting_date')[2:4] + '/' + chat_data.get('meeting_date')[0:2]
     time_string = chat_data.get('meeting_time')[0:2] + ':' + chat_data.get('meeting_time')[2:4]
