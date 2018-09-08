@@ -22,7 +22,7 @@ def create_db():
         conn.commit()
         conn.close()
     except Exception as e:
-        print str(e)
+        print(str(e))
 
 
 def create_meeting(group_id, meeting_time, latitude, longitude, people_id_list):
@@ -37,10 +37,10 @@ def create_meeting(group_id, meeting_time, latitude, longitude, people_id_list):
             c.execute("INSERT INTO inTab (meeting_id, people_id, is_late) VALUES (?,?,?)", (meeting_id, people, 0))
         conn.commit()
         conn.close()
-        print (meeting_id)
+        print(meeting_id)
 
     except Exception as e:
-        print str(e)
+        print(str(e))
 
 
 def get_meeting_time(meeting_id):
@@ -57,7 +57,7 @@ def get_meeting_time(meeting_id):
 
         return meeting_time
     except Exception as e:
-        print str(e)
+        print(str(e))
 
 
 def get_meeting_location(meeting_id):
@@ -74,7 +74,7 @@ def get_meeting_location(meeting_id):
 
         return meetingLocation
     except Exception as e:
-        print str(e)
+        print(str(e))
 
 
 def get_meeting_group_id(meeting_id):
@@ -91,7 +91,7 @@ def get_meeting_group_id(meeting_id):
 
         return group_id
     except Exception as e:
-        print str(e)
+        print(str(e))
 
 def get_meeting_people_id(meeting_id):
     try:
@@ -109,7 +109,7 @@ def get_meeting_people_id(meeting_id):
 
         return people_id_list
     except Exception as e:
-        print (str(e))
+        print(str(e))
 
 
 def get_is_late(meeting_id, people_id):
@@ -122,14 +122,14 @@ def get_is_late(meeting_id, people_id):
         is_late = c.fetchone()[0]
         conn.close()
         if is_late == 1:
-            print (is_late)
+            print(is_late)
             return True
         else:
-            print (is_late)
+            print(is_late)
             return False
 
     except Exception as e:
-        print (str(e))
+        print(str(e))
 
 
 def update_is_late(meeting_id, people_id, is_late):
