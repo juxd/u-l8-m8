@@ -11,19 +11,20 @@ print("Bot started.") # Init message.
 
 
 def addInput(bot, update):
-  msgText = update.message.text.replace("/add ", "")
-  if (Error.error(msgText)):
-     bot.send_message(chat_id=update.message.chat_id, text = "Error in Adding! Try Again!",
+    eventName = update.message.text.replace("/add ", "")
+    bot.send_message(chat_id=update.message.chat_id, text = "Reply this message in this format: DD/MM/YY HH:MM Location",
                     parse_mode="Markdown")
-  else:
-    eventName = LogicHandler.stringToFn(Parser.textToLogic(msgText))
-    bot.send_message(chat_id=update.message.chat_id, text = "Reply this message with this format:DD/MM/YY HH:MM Location",
-                    parse_mode="Markdown")
-    
-def collectMsg(bot, update):
-    
+    dispatcher.add_handler(detailsHandler)
 
+def collectDetails:
+    details = update.message.text;
+    detailsList = details.split(" ")
+    date = detailsList[0]
+    time = detailsList[1]
+    place = detailsList[2]
+    
 addHandler = CommandHandler('add', addInput)
+detailsHandler = MessageHandler(Filters.reply, collectDetails)
 
 dispatcher.add_handler(addHandler)
 updater.start_polling()
