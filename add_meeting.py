@@ -15,7 +15,7 @@ def error_date(date):
         return False
         
 def error_time(time):
-    if (date[2] != ':' or len(time) != 5):
+    if (time[2] != ':' or len(time) != 5):
         return True
     else:
         num_list = time.split(":")
