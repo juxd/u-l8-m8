@@ -1,4 +1,5 @@
-from telegram.ext import Updater
+from telegram.ext import Updater, CommandHandler, InlineQueryHandler
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 from add_meeting import *
 from credentials import api_key
@@ -6,20 +7,11 @@ from helpers import *
 from ping_users import user_handler
 from db_manager import create_db
 
+print("Bot started.") # Init message.
+
 bot = get_bot()
 updater = Updater(token=api_key)
 dispatcher = updater.dispatcher
-
-# Add Meeting handler
-dispatcher.add_handler(add_meeting_handler)
-
-# Add User handler
-dispatcher.add_handler(user_handler)
-
-# Start up
-create_db()
-updater.start_polling()
-print("Bot started.") # Init message.
 
 def build_menu(buttons,n_cols,header_buttons=None,footer_buttons=None):
     menu = [buttons[i:i + n_cols] for i in range(0, len(buttons), n_cols)]
@@ -30,7 +22,28 @@ def build_menu(buttons,n_cols,header_buttons=None,footer_buttons=None):
     return menu
 
 button_list = [
-    InlineKeyboardButton("Talk to me before you reply this message!", url = "https://telegram.me/u-l8-m8-bot")
+    InlineKeyboardButton("Talk to me before you reply this message!", url="t.me/u-l8-m8-bot?start=1")
 ]
 reply_markup = InlineKeyboardMarkup(build_menu(button_list, n_cols=1))
-bot.send_message(chat_id=update.message.chat_id, "Hello! Click start to allow me to pm you", reply_markup=reply_markup)
+
+def start_callback(bot, update):
+    if (update.message.chat_id < 0):
+        bot.send_message(chat_id=update.message.chat_id, text="Hello! Click start to allow me to pm you", reply_markup=reply_markup)
+    else:
+        greeting = "Hello {}, you've been successfully added to u_l8_m8!".format(update.message.from_user.username)
+        bot.send_message(chat_id=update.message.chat_id, text=greeting)
+
+start_handler = CommandHandler("start", start_callback)
+
+# Add Start Handler
+dispatcher.add_handler(start_handler)
+
+# Add Meeting handler
+dispatcher.add_handler(add_meeting_handler)
+
+# Add User handler
+dispatcher.add_handler(user_handler)
+
+# Start up
+create_db()
+updater.start_polling()
