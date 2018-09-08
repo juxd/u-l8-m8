@@ -35,7 +35,7 @@ def start_callback(bot, update):
 
 start_handler = CommandHandler("start", start_callback)
 
-# Add Start Handler
+# Add Start handler
 dispatcher.add_handler(start_handler)
 
 # Add Meeting handler
@@ -44,7 +44,12 @@ dispatcher.add_handler(add_meeting_handler)
 # Add User handler
 dispatcher.add_handler(user_handler)
 
+# Add RSVP handlers
+dispatcher.add_handler(rsvp_handler)
+dispatcher.add_handler(end_rsvp_handler)
+
 # Start up
+open('state.txt', "w+").write('WAITING')
 create_db()
 print("init success")
 updater.start_polling()
