@@ -1,5 +1,5 @@
 import db_manager
-from scheduler import schedule_meeting_reminder\
+import scheduler
 
 
 def reply_suggestions(bot, meeting_id):
@@ -27,6 +27,6 @@ def reschedule_meeting(bot, meeting_id):
     new_time = original_time + 60 * 60
     usernames = db_manager.get_meeting_username(meeting_id)
     new_meeting_id = db_manager.create_meeting(group_id, new_time, location[0], location[1], usernames)
-    schedule_meeting_reminder(bot, meeting_id, new_time)
+    scheduler.schedule_meeting_reminder(bot, meeting_id, new_time)
     bot.send_message(chat_id=group_id, text="meeting rescheduled to one hour later")
 
