@@ -4,55 +4,61 @@ from dateutil import parser
 WAITING_DATE, WAITING_TIME, WAITING_LOCATION = range(3)
 
 # Keep meeting information in memory
-store = {
-        'event_name': None,
-        'meeting_time': None,
-        'meeting_date': None,
-        'lat': None,
-        'lon': None
-        }
+# store = {
+#         'event_name': None,
+#         'meeting_time': None,
+#         'meeting_date': None,
+#         'lat': None,
+#         'lon': None
+#         }
 
-def add_meeting(bot, update):
-    store.set('event_name', update.message.text.replace("/add ", ""))
+def add_meeting(bot, update, chat_data):
+    print("a") # Init message.
+    t = update.message.text.replace("/add ", "")
+    print(chat_data)
+    print("a1") # Init message.update.message.text.replace("/add ", "")
+    chat_data['event_name'] = t
+    print(chat_data)
+    print("b") # Init message.
     bot.send_message(chat_id=update.message.chat_id, text = "Reply this message with the meeting's date in this format: DDMMYY",
                     parse_mode="Markdown")
+    print("c") # Init message.
     return WAITING_DATE
 
-def input_date(bot, update):
-    store.set('meeting_date', update.message.text)
+def input_date(bot, update, chat_data):
+    chat_data['meeting_date'] = update.message.text
     bot.send_message(chat_id=update.message.chat_id, text = "Reply this message with the meeting's time in this format: HHMM",
                 parse_mode="Markdown")
     return WAITING_TIME
 
-def input_time(bot, update):
-    store.set('meeting_time', update.message.text)
+def input_time(bot, update, chat_data):
+    chat_data['meeting_time'] = update.message.text
     bot.send_message(chat_id=update.message.chat_id, text = "Reply this message with attachment of the location",
                 parse_mode="Markdown")
     return WAITING_LOCATION
 
-def input_location(bot, update):
-    store.set('longitude', update.message.location.longitude)
-    store.set('lantitude', update.message.location.latitude)
+def input_location(bot, update, chat_data):
+    chat_data['longitude'] = update.message.location.longitude
+    chat_data['lantitude'] = update.message.location.latitude
     insert_meeting(update.message.chat.id)
     return
 
-def insert_meeting(chat_id):
+def insert_meeting(chat_id, chat_data):
     # convert into MM/DD
-    date_string = store.get('meeting_date')[2:4] + '/' + store.get('meeting_date')[0:2]
-    time_string = store.get('meeting_time')[0:2] + ':' + store.get('meeting_time')[2:4]
+    date_string = chat_data.get('meeting_date')[2:4] + '/' + chat_data.get('meeting_date')[0:2]
+    time_string = chat_data.get('meeting_time')[0:2] + ':' + chat_data.get('meeting_time')[2:4]
     date = parser.parse(date_string + ' ' + time_string)
     epoch = datetime.datetime.utcfromtimestamp(0) 
     seconds_since_epoch = int((date - epoch).total_seconds())
-
-    create_meeting(chat_id, seconds_since_epoch, store.get('lon'), store.get('lat'), [])
+    create_meeting(chat_id, seconds_since_epoch, chat_data.get('lon'), chat_data.get('lat'), [])
 
 
 add_meeting_handler = ConversationHandler(
-    entry_points=[CommandHandler('add', add_meeting)],
+    entry_points=[CommandHandler('add', add_meeting, pass_chat_data=True)],
     states={
-        WAITING_DATE: [MessageHandler(Filters.reply, input_date)],
-        WAITING_TIME: [MessageHandler(Filters.reply, input_time)],
-        WAITING_LOCATION: [MessageHandler(Filters.reply, input_location)]
+        WAITING_DATE: [MessageHandler(Filters.reply, input_date, pass_chat_data=True)],
+        WAITING_TIME: [MessageHandler(Filters.reply, input_time, pass_chat_data=True)],
+        WAITING_LOCATION: [MessageHandler(Filters.reply, input_location, pass_chat_data=True)]
     },
     fallbacks=[CommandHandler('add', add_meeting)]
 )
