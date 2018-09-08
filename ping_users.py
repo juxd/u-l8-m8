@@ -1,8 +1,6 @@
 import db_manager
 from telegram import KeyboardButton, ReplyKeyboardMarkup
-from telegram.ext import Filters
-
-user_handler = MessageHandler(Filters.location, callback=store_location)
+from telegram.ext import Filters, MessageHandler
 
 def ping_for_loc(bot, meeting_id):
     people_ids = db_manager.get_meeting_people_id(meeting_id)
@@ -21,3 +19,4 @@ def store_location(bot, update):
     meeting_id = db_manager.get_latest_meeting(user_id)
     db_manager.store_location(user_id, message, meeting_id, message.location)
 
+user_handler = MessageHandler(Filters.location, callback=store_location)
