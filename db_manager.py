@@ -193,14 +193,14 @@ def update_is_late(meeting_id, username, is_late):
         return False
 
 
-def add_user(username, chat_id, latitude=None, longitude=None):
+def add_user(username, chat_id):
     try:
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
-        param = (username, chat_id, latitude, longitude)
+        param = (username, chat_id)
 
-        c.execute("""REPLACE INTO userTab(username, chat_id, latest_location_latitude, latest_location_longitude) 
-        VALUES (?,?,?,?)""", param)
+        c.execute("""REPLACE INTO userTab(username, chat_id) 
+        VALUES (?,?)""", param)
 
         conn.commit()
         conn.close()
