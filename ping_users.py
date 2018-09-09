@@ -25,6 +25,7 @@ def determine_if_user_being_late(bot, update):
     print('determine_if_user_being_late 1')
     meeting_id = db_manager.find_user_latest_meeting(username)
     print('determine_if_user_being_late 2')
+    location = (location.longitude, location.latitude)
     travel_time = maps_api.get_travel_time(meeting_id, location)
     print('determine_if_user_being_late 3')
     travel_time *= 60
