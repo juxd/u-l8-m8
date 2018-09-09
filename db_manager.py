@@ -195,10 +195,6 @@ def update_is_late(meeting_id, username, is_late):
 
 def add_user(username, chat_id, latitude=None, longitude=None):
     try:
-        if latitude is None or longitude is None:
-            location = find_user_latest_location(username)
-            latitude = location[0]
-            longitude = location[1]
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
         param = (username, chat_id, latitude, longitude)
@@ -314,3 +310,4 @@ def find_user_latest_meeting(username):
 
 
 
+add_user("c", 2)
