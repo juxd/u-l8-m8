@@ -22,7 +22,7 @@ def build_menu(buttons,n_cols,header_buttons=None,footer_buttons=None):
     return menu
 
 button_list = [
-    InlineKeyboardButton("Talk to me before you reply this message!", url="https://t.me/u_l8_m8_bot")
+    InlineKeyboardButton("Talk to me before you reply this message!", url="t.me/u_l8_m8_bot")
 ]
 reply_markup = InlineKeyboardMarkup(build_menu(button_list, n_cols=1))
 
