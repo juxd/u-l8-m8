@@ -5,7 +5,7 @@ from add_meeting import *
 from credentials import api_key
 from helpers import *
 from ping_users import user_handler
-from db_manager import create_db
+from db_manager import create_db, add_user
 
 print("Bot started.") # Init message.
 
