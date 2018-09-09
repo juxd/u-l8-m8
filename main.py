@@ -31,11 +31,13 @@ def start_callback(bot, update):
         bot.send_message(chat_id=update.message.chat_id, text="Hello! Click start to allow me to pm you", reply_markup=reply_markup)
     else:
         username = update.message.from_user.username
-        if username is none:
+        print(username)
+        print(username is None)
+        if username is None:
             bot.send_message(chat_id=update.message.chat_id, text="You need to set a username to use this bot. Set and start again.")
         else:    
             greeting = "Hello {}, you've been successfully added to u-l8-m8-bot!".format(username)
-            add_chat_id_to_user(update.message.chat_id, update.message.from_user.username)
+            add_user(update.message.from_user.username, update.message.chat_id)
             bot.send_message(chat_id=update.message.chat_id, text=greeting)
 
 start_handler = CommandHandler("start", start_callback)

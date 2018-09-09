@@ -277,7 +277,7 @@ def find_user_latest_meeting(username):
         query = "SELECT meeting_id FROM meetingTab WHERE meeting_id IN ({}) ORDER BY meeting_time DESC LIMIT 1".format(
         ','.join('?'*len(meeting_id_tuple)))
         c.execute(query, second_param)
-        meeting = c.fetchone()[0]
+        meeting = c.fetchone()
 
         conn.close()
 
