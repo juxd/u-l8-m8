@@ -265,7 +265,6 @@ def find_user_latest_meeting(username):
     try:
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
-        now = int(time.time())
         param = (username,)
 
         c.execute("SELECT meeting_id FROM inTab WHERE username=?", param)
@@ -274,15 +273,15 @@ def find_user_latest_meeting(username):
         for m in meeting_id_list:
             meeting_id_tuple += m
 
-        second_param = meeting_id_tuple + (now,)
-        query = "SELECT meeting_id FROM meetingTab WHERE meeting_id IN ({}) AND meeting_time>? ORDER BY meeting_time ASC".format(
+        second_param = meeting_id_tuple
+        query = "SELECT meeting_id FROM meetingTab WHERE meeting_id IN ({}) ORDER BY meeting_time DESC LIMIT 1".format(
         ','.join('?'*len(meeting_id_tuple)))
         c.execute(query, second_param)
         meeting = c.fetchone()[0]
 
         conn.close()
 
-        return meeting
+        return meeting[0]
 
     except Exception as e:
         print (str(e))
